@@ -1,10 +1,10 @@
-# Chef's Menu App 🍽️
+# Chef-App
 
 A professional React Native mobile application designed for chefs to efficiently manage their restaurant menus. Built with TypeScript and React Navigation, this app provides an intuitive interface for creating, editing, and organizing menu items.
 
 ##  App Overview
 
-The Chef's Menu App is a cross-platform solution that helps culinary professionals:
+The Chef-App is a cross-platform solution that helps culinary professionals:
 - Create and manage menu items with detailed information
 - Organize dishes by course categories
 - Quickly update menu offerings
