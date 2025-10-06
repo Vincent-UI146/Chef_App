@@ -158,7 +158,7 @@ export const AddEditItemScreen: React.FC<AddEditItemScreenProps> = ({
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Price ($) *</Text>
+          <Text style={styles.label}>Price (R) *</Text>
           <TextInput
             style={styles.textInput}
             value={price}

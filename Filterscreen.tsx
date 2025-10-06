@@ -109,12 +109,12 @@ export const FilterScreen: React.FC<FilterScreenProps> = ({ navigation, route })
         <View style={[styles.statsContainer, { marginBottom: 20 }]}>
           <Text style={[styles.label, { marginBottom: 15 }]}>PRICE RANGE</Text>
           <Text style={[styles.body, { textAlign: 'center', marginBottom: 10 }]}>
-            ${priceRange.min} - ${priceRange.max}
+            R{priceRange.min} - R{priceRange.max}
           </Text>
           <Slider
             style={{ width: '100%', height: 40 }}
             minimumValue={0}
-            maximumValue={100}
+            maximumValue={600}
             minimumTrackTintColor={colors.success}
             maximumTrackTintColor="#d3d3d3"
             thumbTintColor={colors.primary}

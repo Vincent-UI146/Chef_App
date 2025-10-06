@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { MenuItem } from './types'; // ✅ Import from separate file
+import { MenuItem } from './types'; 
 import { styles, colors } from './style';
 
 interface MenuItemCardProps {
@@ -17,7 +17,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onPress }) => 
     >
       <View style={styles.menuItemHeader}>
         <Text style={styles.menuItemName}>{item.name}</Text>
-        <Text style={styles.menuItemPrice}>${item.price}</Text>
+        <Text style={styles.menuItemPrice}>R{item.price}</Text>
       </View>
       <Text style={styles.menuItemDescription}>{item.description}</Text>
       <View style={styles.courseTag}>

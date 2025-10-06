@@ -123,7 +123,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation, route }) => 
           Total Menu Items: {getTotalItems()}
         </Text>
         <Text style={styles.statsText}>
-          Average Price: ${getAveragePrice()}
+          Average Price: R{getAveragePrice()}
         </Text>
         <Text style={styles.statsText}>
           Courses: Starters, Main Courses, Desserts, Drinks
