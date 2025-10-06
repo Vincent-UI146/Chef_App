@@ -28,7 +28,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation, route }) => 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
   const [filters, setFilters] = useState({
     courses: ['Starters', 'Main Courses', 'Desserts', 'Drinks'],
-    priceRange: { min: 0, max: 100 }
+    priceRange: { min: 0, max: 600 }
   });
 
   // Handle adding new item
