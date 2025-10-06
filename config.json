@@ -1,0 +1,6 @@
+{
+    "extends" : "expo/config.base" , 
+    "compilerOptions" : {
+        "strict" : true
+    }
+}
