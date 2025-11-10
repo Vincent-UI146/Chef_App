@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-import { AppNavigator } from './Appnavigator';
+import { Navigation } from './Appnavigator';
 import { colors } from './style';
 
 const App: React.FC = () => {
@@ -10,7 +10,7 @@ const App: React.FC = () => {
         backgroundColor={colors.primary} 
         barStyle="light-content" 
       />
-      <AppNavigator />
+      <Navigation />
     </>
   );
 };

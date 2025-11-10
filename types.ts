@@ -6,8 +6,6 @@ export interface MenuItem {
   description: string;
   price: number;
   course: Course;
-  createdAt: Date;
-  isFeatured: boolean;
 }
 
 export interface FilterState {
@@ -16,24 +14,13 @@ export interface FilterState {
     min: number;
     max: number;
   };
-  featuredOnly: boolean;
 }
 
 export interface CourseStats {
   course: Course;
   count: number;
   averagePrice: number;
-  totalPrice: number;
-  mostExpensive: number;
-  cheapest: number;
-}
-
-export interface MenuAnalysis {
   totalItems: number;
-  totalValue: number;
-  courseStats: CourseStats[];
-  mostExpensiveItem: MenuItem | null;
-  cheapestItem: MenuItem | null;
 }
 
 export type RootStackParamList = {
@@ -44,15 +31,6 @@ export type RootStackParamList = {
     onApplyFilters: (filters: FilterState) => void;
   };
 };
-
-// Global type for application constants
-export interface AppConstants {
-  MAX_PRICE: number;
-  MIN_PRICE: number;
-  MAX_NAME_LENGTH: number;
-  MAX_DESCRIPTION_LENGTH: number;
-  COURSES: Course[];
-}
 
 declare global {
   namespace ReactNavigation {

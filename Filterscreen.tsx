@@ -1,33 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  ScrollView,
-  Switch 
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import Slider from '@react-native-community/slider'; 
-import { courses } from './mockData';
-import { RootStackParamList, FilterState } from './navigation';
+import Slider from '@react-native-community/slider';
+import { RootStackParamList, FilterState } from './types';
+import { courses } from './data';
 import { styles, colors } from './style';
 
 type FilterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Filter'>;
 type FilterScreenRouteProp = RouteProp<RootStackParamList, 'Filter'>;
 
-interface FilterScreenProps {
+interface Props {
   navigation: FilterScreenNavigationProp;
   route: FilterScreenRouteProp;
 }
 
-export const FilterScreen: React.FC<FilterScreenProps> = ({ navigation, route }) => {
+export const FilterScreen: React.FC<Props> = ({ navigation, route }) => {
   const { filters: initialFilters, onApplyFilters } = route.params;
   
-  const [selectedCourses, setSelectedCourses] = useState<string[]>(
-    initialFilters.courses
-  );
+  const [selectedCourses, setSelectedCourses] = useState<string[]>(initialFilters.courses);
   const [priceRange, setPriceRange] = useState(initialFilters.priceRange);
+
+  useEffect(() => {
+    setSelectedCourses(initialFilters.courses);
+    setPriceRange(initialFilters.priceRange);
+  }, [initialFilters]);
 
   const toggleCourse = (course: string) => {
     setSelectedCourses(prev => 
@@ -39,7 +36,7 @@ export const FilterScreen: React.FC<FilterScreenProps> = ({ navigation, route })
 
   const handleReset = () => {
     setSelectedCourses(['Starters', 'Main Courses', 'Desserts', 'Drinks']);
-    setPriceRange({ min: 0, max: 100 });
+    setPriceRange({ min: 0, max: 1000 });
   };
 
   const handleApply = () => {
@@ -48,10 +45,7 @@ export const FilterScreen: React.FC<FilterScreenProps> = ({ navigation, route })
       priceRange
     };
     
-    if (onApplyFilters) {
-      onApplyFilters(newFilters);
-    }
-    
+    onApplyFilters(newFilters);
     navigation.goBack();
   };
 
@@ -63,91 +57,84 @@ export const FilterScreen: React.FC<FilterScreenProps> = ({ navigation, route })
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Filter Menu</Text>
-        <TouchableOpacity 
-          style={[styles.filterButton, { backgroundColor: colors.danger }]}
-          onPress={handleClose}
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Filter Menu</Text>
+          <TouchableOpacity 
+            style={[styles.button, styles.dangerButton]}
+            onPress={handleClose}
+          >
+            <Text style={styles.buttonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView 
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
         >
-          <Text style={styles.filterButtonText}>Close</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={[styles.card, { marginBottom: 20 }]}>
+            <Text style={[styles.label, { marginBottom: 15 }]}>COURSES</Text>
+            {courses.map((course) => (
+              <TouchableOpacity
+                key={course.value}
+                style={styles.filterOption}
+                onPress={() => toggleCourse(course.value)}
+              >
+                <Text style={styles.statsText}>{course.label}</Text>
+                <Switch
+                  value={isCourseSelected(course.value)}
+                  onValueChange={() => toggleCourse(course.value)}
+                  trackColor={{ false: '#767577', true: colors.success }}
+                  thumbColor={isCourseSelected(course.value) ? colors.white : '#f4f3f4'}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
 
-      <ScrollView 
-        style={{ flex: 1 }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      >
-        {/* Course Filter Section */}
-        <View style={[styles.statsContainer, { marginBottom: 20 }]}>
-          <Text style={[styles.label, { marginBottom: 15 }]}>COURSES</Text>
-          {courses.map((course) => (
-            <TouchableOpacity
-              key={course.value}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingVertical: 12,
-                borderBottomWidth: 1,
-                borderBottomColor: '#f0f0f0'
-              }}
-              onPress={() => toggleCourse(course.value)}
+          <View style={[styles.card, { marginBottom: 20 }]}>
+            <Text style={[styles.label, { marginBottom: 15 }]}>PRICE RANGE</Text>
+            <Text style={[styles.statsText, { textAlign: 'center', marginBottom: 10 }]}>
+              R{priceRange.min} - R{priceRange.max}
+            </Text>
+            <Slider
+              style={{ width: '100%', height: 40 }}
+              minimumValue={0}
+              maximumValue={100}
+              minimumTrackTintColor={colors.success}
+              maximumTrackTintColor="#d3d3d3"
+              thumbTintColor={colors.primary}
+              value={priceRange.max}
+              onValueChange={(value) => setPriceRange(prev => ({ ...prev, max: value }))}
+            />
+          </View>
+
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity 
+              style={[styles.button, { 
+                backgroundColor: 'transparent',
+                borderWidth: 1,
+                borderColor: colors.dark,
+                flex: 1
+              }]} 
+              onPress={handleReset}
             >
-              <Text style={styles.body}>{course.label}</Text>
-              <Switch
-                value={isCourseSelected(course.value)}
-                onValueChange={() => toggleCourse(course.value)}
-                trackColor={{ false: '#767577', true: colors.success }}
-                thumbColor={isCourseSelected(course.value) ? colors.white : '#f4f3f4'}
-              />
+              <Text style={[styles.buttonText, { color: colors.dark }]}>
+                Reset
+              </Text>
             </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Price Range Section */}
-        <View style={[styles.statsContainer, { marginBottom: 20 }]}>
-          <Text style={[styles.label, { marginBottom: 15 }]}>PRICE RANGE</Text>
-          <Text style={[styles.body, { textAlign: 'center', marginBottom: 10 }]}>
-            R{priceRange.min} - R{priceRange.max}
-          </Text>
-          <Slider
-            style={{ width: '100%', height: 40 }}
-            minimumValue={0}
-            maximumValue={600}
-            minimumTrackTintColor={colors.success}
-            maximumTrackTintColor="#d3d3d3"
-            thumbTintColor={colors.primary}
-            value={priceRange.max}
-            onValueChange={(value) => setPriceRange(prev => ({ ...prev, max: value }))}
-          />
-        </View>
-
-        {/* Action Buttons */}
-        <View style={styles.buttonGroup}>
-          <TouchableOpacity 
-            style={[styles.button, { 
-              backgroundColor: 'transparent',
-              borderWidth: 1,
-              borderColor: colors.dark
-            }]} 
-            onPress={handleReset}
-          >
-            <Text style={[styles.buttonText, { color: colors.dark }]}>
-              Reset
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.button, styles.saveButton]} 
-            onPress={handleApply}
-          >
-            <Text style={styles.buttonText}>
-              Apply Filters
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            
+            <TouchableOpacity 
+              style={[styles.button, styles.successButton, { flex: 2 }]} 
+              onPress={handleApply}
+            >
+              <Text style={styles.buttonText}>
+                Apply Filters
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 };

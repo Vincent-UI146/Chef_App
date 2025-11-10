@@ -1,14 +1,21 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { MenuItem } from './types'; 
-import { styles, colors } from './style';
+import { MenuItem } from './types';
+import { styles } from './style';
 
-interface MenuItemCardProps {
+interface Props {
   item: MenuItem;
   onPress?: () => void;
+  showDelete?: boolean;
+  onDelete?: (id: string) => void;
 }
 
-export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onPress }) => {
+export const MenuItemCard: React.FC<Props> = ({ 
+  item, 
+  onPress, 
+  showDelete = false, 
+  onDelete 
+}) => {
   return (
     <TouchableOpacity 
       style={styles.menuItemCard} 
@@ -20,11 +27,19 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, onPress }) => 
         <Text style={styles.menuItemPrice}>R{item.price}</Text>
       </View>
       <Text style={styles.menuItemDescription}>{item.description}</Text>
-      <View style={styles.courseTag}>
-        <Text style={styles.courseTagText}>{item.course}</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={styles.courseTag}>
+          <Text style={styles.courseTagText}>{item.course}</Text>
+        </View>
+        {showDelete && onDelete && (
+          <TouchableOpacity 
+            style={[styles.button, styles.dangerButton, { paddingHorizontal: 12, paddingVertical: 6 }]}
+            onPress={() => onDelete(item.id)}
+          >
+            <Text style={[styles.buttonText, { fontSize: 12 }]}>Delete</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
 };
-export { MenuItem };
-

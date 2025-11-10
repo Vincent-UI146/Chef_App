@@ -6,10 +6,12 @@ export const colors = {
   success: '#27ae60',
   danger: '#e74c3c',
   warning: '#f39c12',
+  info: '#17a2b8',
   light: '#ecf0f1',
   dark: '#2c3e50',
   white: '#ffffff',
-  background: '#f8f9fa'
+  background: '#f8f9fa',
+  card: '#ffffff'
 };
 
 export const typography = {
@@ -35,115 +37,102 @@ export const typography = {
     fontSize: 16,
     fontWeight: 'bold' as const,
     color: colors.success
+  },
+  stats: {
+    fontSize: 14,
+    fontWeight: '500' as const,
+    color: colors.info
   }
 };
 
 export const styles = StyleSheet.create({
+  // Layout
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    padding: 16
   },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  
+  // Header
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
-    paddingTop: 10
+    paddingTop: 10,
   },
   headerTitle: {
     ...typography.heading,
     color: colors.primary
   },
-  filterButton: {
+  
+  // Buttons
+  button: {
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+  },
+  secondaryButton: {
     backgroundColor: colors.secondary,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20
   },
-  filterButtonText: {
+  successButton: {
+    backgroundColor: colors.success,
+  },
+  dangerButton: {
+    backgroundColor: colors.danger,
+  },
+  buttonText: {
     color: colors.white,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontSize: 16,
   },
-  statsContainer: {
-    backgroundColor: colors.white,
+  buttonGroup: {
+    flexDirection: 'row',
+    gap: 10,
+    marginVertical: 16,
+  },
+  
+  // Cards
+  card: {
+    backgroundColor: colors.card,
     padding: 16,
     borderRadius: 12,
-    marginBottom: 20,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3
+    elevation: 3,
   },
-  statsText: {
-    ...typography.body,
-    marginBottom: 4
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-    marginTop: 20
-  },
-  sectionTitle: {
-    ...typography.subheading,
-    color: colors.primary
-  },
-  menuItemCard: {
-    backgroundColor: colors.white,
+  statsCard: {
+    backgroundColor: colors.card,
     padding: 16,
     borderRadius: 12,
-    marginBottom: 12,
+    marginBottom: 16,
+  },
+  menuItemCard: {
+    backgroundColor: colors.card,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 2
+    elevation: 2,
   },
-  menuItemHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8
-  },
-  menuItemName: {
-    ...typography.subheading,
-    flex: 1,
-    marginRight: 10
-  },
-  menuItemPrice: {
-    ...typography.price
-  },
-  menuItemDescription: {
-    ...typography.caption,
-    color: '#666',
-    lineHeight: 20
-  },
-  addButton: {
-    backgroundColor: colors.success,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4
-  },
-  addButtonText: {
-    ...typography.subheading,
-    fontWeight: '600',
-    color: colors.white 
-  },
-  formContainer: {
-    flex: 1,
-    padding: 16
-  },
+  
+  // Forms
   inputGroup: {
-    marginBottom: 20
+    marginBottom: 16,
   },
   label: {
     ...typography.body,
@@ -161,51 +150,138 @@ export const styles = StyleSheet.create({
   },
   textArea: {
     height: 100,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
   picker: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
+    marginBottom: 16,
   },
-  buttonGroup: {
+  
+  // Menu Items
+  menuItemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 30
+    alignItems: 'flex-start',
+    marginBottom: 8,
   },
-  button: {
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
+  menuItemName: {
+    ...typography.subheading,
     flex: 1,
-    marginHorizontal: 5
+    marginRight: 10,
   },
-  saveButton: {
-    backgroundColor: colors.success
+  menuItemPrice: {
+    ...typography.price,
   },
-  cancelButton: {
-    backgroundColor: colors.danger
+  menuItemDescription: {
+    ...typography.caption,
+    color: '#666',
+    lineHeight: 20,
+    marginBottom: 8,
   },
-  buttonText: {
-    color: colors.white,
-    fontWeight: '600',
-    fontSize: 16
-  },
+  
+  // Course Tags
   courseTag: {
     backgroundColor: colors.light,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     alignSelf: 'flex-start',
-    marginTop: 8
   },
   courseTagText: {
     fontSize: 12,
     color: colors.dark,
-    fontWeight: '500'
+    fontWeight: '500',
   },
-  body: {
-    ...typography.body 
-  }
+  
+  // Sections
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    marginTop: 20,
+  },
+  sectionTitle: {
+    ...typography.subheading,
+    color: colors.primary,
+  },
+  
+  // Stats
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  statsText: {
+    ...typography.body,
+  },
+  statsValue: {
+    ...typography.stats,
+    fontWeight: '600',
+  },
+  
+  // Filter
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  
+  // Empty States
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  emptyStateText: {
+    ...typography.body,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  
+  
+  // Navigation
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: colors.primary,
+    paddingVertical: 8,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  tabButtonActive: {
+    backgroundColor: colors.secondary,
+    borderRadius: 8,
+    marginHorizontal: 4,
+  },
+  tabButtonText: {
+    color: colors.white,
+    fontWeight: '600',
+  },
+});
+
+export const style = StyleSheet.create({
+  
+
+  
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 100, 
+  },
+  
+  // ... rest of existing styles ...
 });

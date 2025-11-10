@@ -1,161 +1,130 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  ScrollView,
-  Alert 
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { MenuItemCard } from './MenuItemCard';
-import { MenuItem } from './MenuItemCard';
-import { initialMenuItems } from './mockData';
-import { RootStackParamList } from './navigation';
+import { RootStackParamList, MenuItem, FilterState } from './types';
+import { useMenu } from './useMenu';
+import { StatsCard } from './StatsCard';
+import { CourseSection } from './CourseSection';
 import { styles, colors } from './style';
-import { Course } from './Index';
 
-// Define navigation props type
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
-interface HomeScreenProps {
+interface Props {
   navigation: HomeScreenNavigationProp;
   route: HomeScreenRouteProp;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation, route }) => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems);
-  const [filters, setFilters] = useState({
+export const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const { 
+    menuItems, 
+    getItemsByCourse, 
+    getCourseStats,
+    getFilteredItems 
+  } = useMenu();
+  
+  const [filters, setFilters] = useState<FilterState>({
     courses: ['Starters', 'Main Courses', 'Desserts', 'Drinks'],
-    priceRange: { min: 0, max: 600 }
+    priceRange: { min: 0, max: 100 }
   });
 
-  // Handle adding new item
-  const handleAddItem = () => {
-    navigation.navigate('AddEditItem', {
-      onSave: (newItem: MenuItem) => {
-        setMenuItems(prev => [...prev, newItem]);
-        Alert.alert('Success', 'Menu item added successfully!');
-      }
-    });
-  };
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>(menuItems);
 
-  // Handle editing existing item
-  const handleEditItem = (item: MenuItem) => {
-    navigation.navigate('AddEditItem', {
-      item,
-      onSave: (updatedItem: MenuItem) => {
-        setMenuItems(prev => 
-          prev.map(menuItem => 
-            menuItem.id === updatedItem.id ? updatedItem : menuItem
-          )
-        );
-        Alert.alert('Success', 'Menu item updated successfully!');
-      },
-      onDelete: (id: string) => {
-        setMenuItems(prev => prev.filter(item => item.id !== id));
-        Alert.alert('Success', 'Menu item deleted successfully!');
-      }
-    });
-  };
-
-  // Handle filter application
   const handleOpenFilter = () => {
     navigation.navigate('Filter', {
       filters,
-      onApplyFilters: (newFilters) => {
+      onApplyFilters: (newFilters: FilterState) => {
         setFilters(newFilters);
-        // In final PoE, we'll implement actual filtering logic
-        Alert.alert('Filters Applied', 'Menu items filtered successfully!');
+        const filtered = getFilteredItems(newFilters);
+        setFilteredItems(filtered);
+        setIsFiltered(true);
       }
     });
   };
 
-  const getItemsByCourse = (course: Course) => {
-    return menuItems.filter(item => item.course === course);
+  const handleClearFilters = () => {
+    setFilters({
+      courses: ['Starters', 'Main Courses', 'Desserts', 'Drinks'],
+      priceRange: { min: 0, max: 100 }
+    });
+    setFilteredItems(menuItems);
+    setIsFiltered(false);
   };
 
-  const getTotalItems = () => menuItems.length;
-
-  const getAveragePrice = () => {
-    if (menuItems.length === 0) return 0;
-    const total = menuItems.reduce((sum, item) => sum + item.price, 0);
-    return (total / menuItems.length).toFixed(2);
+  const handleManageMenu = () => {
+    navigation.navigate('ManageMenu');
   };
 
-  const renderCourseSection = (course: Course) => {
-    const courseItems = getItemsByCourse(course);
-    if (courseItems.length === 0) return null;
+  const displayItems = isFiltered ? filteredItems : menuItems;
+  const stats = getCourseStats();
 
-    return (
-      <View key={course}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>
-            {course} ({courseItems.length})
-          </Text>
-        </View>
-        {courseItems.map(item => (
-          <MenuItemCard 
-            key={item.id} 
-            item={item} 
-            onPress={() => handleEditItem(item)}
-          />
-        ))}
-      </View>
-    );
-  };
+  const courses = ['Starters', 'Main Courses', 'Desserts', 'Drinks'] as const;
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Chef's Menu</Text>
-        <TouchableOpacity 
-          style={styles.filterButton}
-          onPress={handleOpenFilter}
-        >
-          <Text style={styles.filterButtonText}>Filter</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Chef's Menu</Text>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <TouchableOpacity 
+              style={[styles.button, styles.secondaryButton]}
+              onPress={handleOpenFilter}
+            >
+              <Text style={styles.buttonText}>Filter</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.button, styles.primaryButton]}
+              onPress={handleManageMenu}
+            >
+              <Text style={styles.buttonText}>Manage</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      <View style={styles.statsContainer}>
-        <Text style={styles.statsText}>
-          Total Menu Items: {getTotalItems()}
-        </Text>
-        <Text style={styles.statsText}>
-          Average Price: R{getAveragePrice()}
-        </Text>
-        <Text style={styles.statsText}>
-          Courses: Starters, Main Courses, Desserts, Drinks
-        </Text>
-      </View>
+        <StatsCard stats={stats} />
 
-      <ScrollView 
-        style={{ flex: 1 }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      >
-        {renderCourseSection('Starters')}
-        {renderCourseSection('Main Courses')}
-        {renderCourseSection('Desserts')}
-        {renderCourseSection('Drinks')}
-
-        {menuItems.length === 0 && (
-          <View style={{ alignItems: 'center', marginTop: 50 }}>
-            <Text style={[styles.body, { color: '#666', textAlign: 'center' }]}>
-              No menu items yet.{'\n'}
-              Tap the button below to add your first dish!
+        {isFiltered && (
+          <View style={[styles.card, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
+            <Text style={styles.statsText}>
+              Showing {filteredItems.length} of {menuItems.length} items
             </Text>
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: 'transparent', paddingHorizontal: 12 }]}
+              onPress={handleClearFilters}
+            >
+              <Text style={[styles.buttonText, { color: colors.danger }]}>Clear Filters</Text>
+            </TouchableOpacity>
           </View>
         )}
-      </ScrollView>
 
-      <TouchableOpacity 
-        style={styles.addButton}
-        onPress={handleAddItem}
-      >
-        <Text style={styles.addButtonText}>+ Add New Menu Item</Text>
-      </TouchableOpacity>
+        <ScrollView 
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
+          {courses.map(course => (
+            <CourseSection
+              key={course}
+              course={course}
+              items={displayItems.filter(item => item.course === course)}
+              onItemPress={() => {}} // Read-only on home screen
+            />
+          ))}
+
+          {displayItems.length === 0 && (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>
+                {isFiltered 
+                  ? 'No items match your filters.\nTry adjusting your filter settings.'
+                  : 'No menu items available.\nTap "Manage" to add some dishes!'
+                }
+              </Text>
+            </View>
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 };

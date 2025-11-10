@@ -1,15 +1,15 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native'; 
-import { createStackNavigator } from '@react-navigation/stack'; 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from './Homescreen';
-import { AddEditItemScreen } from './AddItemForm';
+import { ManageMenuScreen } from './ManageMenuScreen';
 import { FilterScreen } from './Filterscreen';
-import { RootStackParamList } from './navigation';
+import { RootStackParamList } from './types';
 import { colors } from './style';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const AppNavigator: React.FC = () => {
+export const Navigation: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -33,15 +33,14 @@ export const AppNavigator: React.FC = () => {
           component={HomeScreen}
           options={{
             title: "Chef's Menu",
-            headerRight: () => null,
           }}
         />
         <Stack.Screen 
-          name="AddEditItem" 
-          component={AddEditItemScreen}
-          options={({ route }) => ({ 
-            title: route.params?.item ? 'Edit Menu Item' : 'Add Menu Item'
-          })}
+          name="ManageMenu" 
+          component={ManageMenuScreen}
+          options={{
+            title: 'Manage Menu',
+          }}
         />
         <Stack.Screen 
           name="Filter" 
