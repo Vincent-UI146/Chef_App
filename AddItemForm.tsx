@@ -309,7 +309,7 @@ export const AddItemForm: React.FC<Props> = ({
 
             {/* Price Field */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Price (ZAR) *</Text>
+              <Text style={styles.label}>Price (R) *</Text>
               <TextInput
                 style={[
                   styles.textInput,

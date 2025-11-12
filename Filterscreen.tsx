@@ -100,7 +100,7 @@ export const FilterScreen: React.FC<Props> = ({ navigation, route }) => {
             <Slider
               style={{ width: '100%', height: 40 }}
               minimumValue={0}
-              maximumValue={100}
+              maximumValue={1000}
               minimumTrackTintColor={colors.success}
               maximumTrackTintColor="#d3d3d3"
               thumbTintColor={colors.primary}

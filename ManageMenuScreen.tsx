@@ -221,7 +221,7 @@ export const ManageMenuScreen: React.FC<Props> = ({ navigation }) => {
                 </View>
 
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Price ($) *</Text>
+                  <Text style={styles.label}>Price (R) *</Text>
                   <TextInput
                     style={styles.textInput}
                     value={price}
