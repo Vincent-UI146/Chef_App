@@ -240,6 +240,21 @@ The app now includes:
 - **Modular Components** for reusability
 - **Professional Styling** with consistent design system
 
+### Screenshots
+
+<img width="395" height="854" alt="Screenshot 2025-11-10 143050" src="https://github.com/user-attachments/assets/e5135d4a-6355-43e7-a1a3-7b13b010a60f" />
+
+<img width="392" height="852" alt="Screenshot 2025-11-10 143033" src="https://github.com/user-attachments/assets/e23acd8a-b736-45f9-b2c8-347312b40e1d" />
+
+<img width="395" height="860" alt="Screenshot 2025-11-10 142947" src="https://github.com/user-attachments/assets/56f840e4-1af3-400c-9078-78c329b09f7e" />
+
+<img width="395" height="853" alt="Screenshot 2025-11-10 143013" src="https://github.com/user-attachments/assets/1ad8e4fc-b3db-4a6a-996f-9d8f7036810c" />
+
+
+
+
+
+
 
 
 
